@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Loader } from "./Loader";
+import { Grid2, Typography } from "@mui/material";
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +29,6 @@ const StockGraph = () => {
   const selectedStock = useSelector((state) => state.stock.selectedStock);
   const selectedDuration = useSelector((state) => state.stock.selectedDuration);
   const data = useSelector((state) => state.stock.data[selectedStock] || []);
-  console.log("Darta", data);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -44,7 +43,6 @@ const StockGraph = () => {
   }, [dispatch, selectedStock, selectedDuration]);
 
   if (!selectedStock) return <p>Select a stock to view data.</p>;
-  if (loading) return <Loader />;
   if (!data || data.length === 0) return <p>No Data Available</p>;
 
   const formatDate = (timestamp) => {
@@ -52,20 +50,79 @@ const StockGraph = () => {
     return date.toLocaleDateString();
   };
 
-  const chartData = {
+  const chartData = (label, dataKey, color) => ({
     labels: data.data.map((point) => formatDate(point.timestamp)),
     datasets: [
       {
-        label: "Stock Price",
-        data: data.data.map((point) => point.price),
-        borderColor: "blue",
+        label,
+        data: data.data.map((point) => point[dataKey]),
+        borderColor: color,
         borderWidth: 2,
         fill: false,
+        tension: 0.4,
       },
     ],
-  };
+  });
 
-  return <Line data={chartData} />;
+  return (
+    <Grid2
+      container
+      style={{
+        alignItem: "center",
+        justifyContent: "center",
+        padding: "2rem",
+        gap: "2rem",
+      }}
+    >
+      <Grid2
+        item
+        xs={12}
+        sm={6}
+        style={{ border: "2px black solid", padding: "1rem" }}
+      >
+        <Typography variant="h6" gutterBottom>
+          Price Graph
+        </Typography>
+        <Line
+          data={chartData("Stock Price", "price", "blue")}
+          height={150}
+          width={400}
+        />
+      </Grid2>
+
+      <Grid2
+        item
+        xs={12}
+        sm={6}
+        style={{ border: "2px black solid", padding: "1rem" }}
+      >
+        <Typography variant="h6" gutterBottom>
+          Change Graph
+        </Typography>
+        <Line
+          data={chartData("Change", "change", "green")}
+          height={150}
+          width={400}
+        />
+      </Grid2>
+
+      <Grid2
+        item
+        xs={12}
+        sm={6}
+        style={{ border: "2px black solid", padding: "1rem" }}
+      >
+        <Typography variant="h6" gutterBottom>
+          Change Graph
+        </Typography>
+        <Line
+          data={chartData("Volume", "volume", "orange")}
+          height={150}
+          width={400}
+        />
+      </Grid2>
+    </Grid2>
+  );
 };
 
 export default StockGraph;
