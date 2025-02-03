@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchStocks = createAsyncThunk('stocks/fetchStocks', async () => {
-  const response = await axios.get('http://localhost:3000/api/stocks');
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/stocks`);
   return response.data;
 });
 
@@ -14,7 +14,7 @@ export const fetchStockData = createAsyncThunk(
     const pollData = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/stocks/${stockId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/stocks/${stockId}`,
           { duration }
         );
 

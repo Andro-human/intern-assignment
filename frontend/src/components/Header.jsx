@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  RedirectToSignIn,
-} from "@clerk/clerk-react";
-import { Avatar, Box, Button, Link, Typography } from "@mui/material";
+import { SignedIn, UserButton, RedirectToSignIn } from "@clerk/clerk-react";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 
 const Header = () => {
@@ -32,11 +26,6 @@ const Header = () => {
           alignItems: "center",
         }}
       >
-        <Avatar
-          src="/assets/analysis.png"
-          alt="Logo"
-          sx={{ marginRight: "10px" }}
-        />
         <Typography
           variant="h6"
           sx={{
